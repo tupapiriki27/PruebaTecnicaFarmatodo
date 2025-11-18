@@ -141,20 +141,20 @@ spring.h2.console.enabled=true
 spring.h2.console.path=/h2-console
 
 # Configuración de Tokenización
-tokenization.api.key=tk_live_secure_tokenization_key_2024
+tokenization.api.key=tk_live_secure_tokenization_key_2025
 tokenization.rejection.probability=0.1
 
 # Configuración de Clientes
-customer.api.key=cs_live_secure_customer_key_2024
+customer.api.key=cs_live_secure_customer_key_2025
 
 # Configuración de Productos
-products.api.key=pd_live_secure_products_key_2024
+products.api.key=pd_live_secure_products_key_2025
 
 # Configuración de Pedidos/Carrito
-orders.api.key=or_live_secure_orders_key_2024
+orders.api.key=or_live_secure_orders_key_2025
 
 # Configuración de Pagos
-payments.api.key=py_live_secure_payments_key_2024
+payments.api.key=py_live_secure_payments_key_2025
 payment.approval.probability=0.7
 payment.max.retry.attempts=3
 payment.retry.delay.millis=1000
@@ -322,7 +322,7 @@ POST /api/v1/tokenization/tokens
 
 **Headers:**
 ```
-X-API-Key: tk_live_secure_tokenization_key_2024
+X-API-Key: tk_live_secure_tokenization_key_2025
 Content-Type: application/json
 ```
 
@@ -349,7 +349,7 @@ Content-Type: application/json
   "lastFourDigits": "1111",
   "cardBrand": "VISA",
   "expirationDate": "12/25",
-  "createdAt": "2024-11-16T18:15:23",
+  "createdAt": "2025-11-16T18:15:23",
   "active": true
 }
 ```
@@ -373,7 +373,7 @@ POST /api/v1/customers
 
 **Headers:**
 ```
-X-API-Key: cs_live_secure_customer_key_2024
+X-API-Key: cs_live_secure_customer_key_2025
 Content-Type: application/json
 ```
 
@@ -418,8 +418,8 @@ Content-Type: application/json
   "state": "NY",
   "zipCode": "10001",
   "country": "USA",
-  "createdAt": "2024-11-16T18:15:23",
-  "updatedAt": "2024-11-16T18:15:23",
+  "createdAt": "2025-11-16T18:15:23",
+  "updatedAt": "2025-11-16T18:15:23",
   "active": true
 }
 ```
@@ -443,7 +443,7 @@ POST /api/v1/products
 
 **Headers:**
 ```
-X-API-Key: pd_live_secure_products_key_2024
+X-API-Key: pd_live_secure_products_key_2025
 Content-Type: application/json
 ```
 
@@ -478,8 +478,8 @@ Content-Type: application/json
   "category": "Electronics",
   "sku": "DELL-XPS15-001",
   "active": true,
-  "createdAt": "2024-11-16T18:15:23",
-  "updatedAt": "2024-11-16T18:15:23"
+  "createdAt": "2025-11-16T18:15:23",
+  "updatedAt": "2025-11-16T18:15:23"
 }
 ```
 
@@ -493,7 +493,7 @@ GET /api/v1/products
 
 **Headers:**
 ```
-X-API-Key: pd_live_secure_products_key_2024
+X-API-Key: pd_live_secure_products_key_2025
 ```
 
 **Respuesta Exitosa (200 OK):**
@@ -508,8 +508,8 @@ X-API-Key: pd_live_secure_products_key_2024
     "category": "Electronics",
     "sku": "DELL-XPS15-001",
     "active": true,
-    "createdAt": "2024-11-16T18:15:23",
-    "updatedAt": "2024-11-16T18:15:23"
+    "createdAt": "2025-11-16T18:15:23",
+    "updatedAt": "2025-11-16T18:15:23"
   }
 ]
 ```
@@ -524,7 +524,7 @@ GET /api/v1/products/{id}
 
 **Headers:**
 ```
-X-API-Key: pd_live_secure_products_key_2024
+X-API-Key: pd_live_secure_products_key_2025
 ```
 
 **Respuesta Exitosa (200 OK):**
@@ -538,8 +538,8 @@ X-API-Key: pd_live_secure_products_key_2024
   "category": "Electronics",
   "sku": "DELL-XPS15-001",
   "active": true,
-  "createdAt": "2024-11-16T18:15:23",
-  "updatedAt": "2024-11-16T18:15:23"
+  "createdAt": "2025-11-16T18:15:23",
+  "updatedAt": "2025-11-16T18:15:23"
 }
 ```
 
@@ -562,7 +562,7 @@ POST /api/v1/orders/cart/{customerId}
 
 **Headers:**
 ```
-X-API-Key: or_live_secure_orders_key_2024
+X-API-Key: or_live_secure_orders_key_2025
 Content-Type: application/json
 ```
 
@@ -597,8 +597,8 @@ Content-Type: application/json
   ],
   "totalAmount": 2599.98,
   "status": "CART",
-  "createdAt": "2024-11-16T18:15:23",
-  "updatedAt": "2024-11-16T18:15:23"
+  "createdAt": "2025-11-16T18:15:23",
+  "updatedAt": "2025-11-16T18:15:23"
 }
 ```
 
@@ -617,7 +617,7 @@ GET /api/v1/orders/cart/{customerId}
 
 **Headers:**
 ```
-X-API-Key: or_live_secure_orders_key_2024
+X-API-Key: or_live_secure_orders_key_2025
 ```
 
 **Respuesta Exitosa (200 OK):**
@@ -638,8 +638,8 @@ X-API-Key: or_live_secure_orders_key_2024
   ],
   "totalAmount": 2599.98,
   "status": "CART",
-  "createdAt": "2024-11-16T18:15:23",
-  "updatedAt": "2024-11-16T18:15:23"
+  "createdAt": "2025-11-16T18:15:23",
+  "updatedAt": "2025-11-16T18:15:23"
 }
 ```
 
@@ -656,7 +656,7 @@ X-API-Key: or_live_secure_orders_key_2024
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/tokenization/tokens \
-  -H "X-API-Key: tk_live_secure_tokenization_key_2024" \
+  -H "X-API-Key: tk_live_secure_tokenization_key_2025" \
   -H "Content-Type: application/json" \
   -d '{
     "cardNumber": "4111111111111111",
@@ -670,7 +670,7 @@ curl -X POST http://localhost:8080/api/v1/tokenization/tokens \
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/customers \
-  -H "X-API-Key: cs_live_secure_customer_key_2024" \
+  -H "X-API-Key: cs_live_secure_customer_key_2025" \
   -H "Content-Type: application/json" \
   -d '{
     "firstName": "Jane",
@@ -695,7 +695,7 @@ curl http://localhost:8080/ping
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/products \
-  -H "X-API-Key: pd_live_secure_products_key_2024" \
+  -H "X-API-Key: pd_live_secure_products_key_2025" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Laptop Dell XPS 15",
@@ -711,7 +711,7 @@ curl -X POST http://localhost:8080/api/v1/products \
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/orders/cart/1 \
-  -H "X-API-Key: or_live_secure_orders_key_2024" \
+  -H "X-API-Key: or_live_secure_orders_key_2025" \
   -H "Content-Type: application/json" \
   -d '{
     "productId": 1,
@@ -723,7 +723,7 @@ curl -X POST http://localhost:8080/api/v1/orders/cart/1 \
 
 ```bash
 curl http://localhost:8080/api/v1/orders/cart/1 \
-  -H "X-API-Key: or_live_secure_orders_key_2024"
+  -H "X-API-Key: or_live_secure_orders_key_2025"
 ```
 
 ### Pagos y Checkout
@@ -738,7 +738,7 @@ POST /api/v1/payments/checkout
 
 **Headers:**
 ```
-X-API-Key: py_live_secure_payments_key_2024
+X-API-Key: py_live_secure_payments_key_2025
 Content-Type: application/json
 ```
 
@@ -789,16 +789,16 @@ Content-Type: application/json
     "status": "APPROVED",
     "attemptCount": 1,
     "failureReason": null,
-    "createdAt": "2024-11-16T18:15:23",
-    "updatedAt": "2024-11-16T18:15:23"
+    "createdAt": "2025-11-16T18:15:23",
+    "updatedAt": "2025-11-16T18:15:23"
   },
   "shippingAddress": "123 Main Street",
   "shippingCity": "New York",
   "shippingState": "NY",
   "shippingZipCode": "10001",
   "shippingCountry": "USA",
-  "createdAt": "2024-11-16T18:15:23",
-  "updatedAt": "2024-11-16T18:15:23"
+  "createdAt": "2025-11-16T18:15:23",
+  "updatedAt": "2025-11-16T18:15:23"
 }
 ```
 
@@ -818,7 +818,7 @@ GET /api/v1/payments/checkout/{customerId}/{orderId}
 
 **Headers:**
 ```
-X-API-Key: py_live_secure_payments_key_2024
+X-API-Key: py_live_secure_payments_key_2025
 ```
 
 **Respuesta Exitosa (200 OK):**
@@ -837,8 +837,8 @@ X-API-Key: py_live_secure_payments_key_2024
     "status": "APPROVED",
     "attemptCount": 1,
     "failureReason": null,
-    "createdAt": "2024-11-16T18:15:23",
-    "updatedAt": "2024-11-16T18:15:23"
+    "createdAt": "2025-11-16T18:15:23",
+    "updatedAt": "2025-11-16T18:15:23"
   },
   ...
 }
@@ -853,7 +853,7 @@ X-API-Key: py_live_secure_payments_key_2024
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/payments/checkout \
-  -H "X-API-Key: py_live_secure_payments_key_2024" \
+  -H "X-API-Key: py_live_secure_payments_key_2025" \
   -H "Content-Type: application/json" \
   -d '{
     "customerId": 1,
@@ -870,7 +870,7 @@ curl -X POST http://localhost:8080/api/v1/payments/checkout \
 
 ```bash
 curl http://localhost:8080/api/v1/payments/checkout/1/1 \
-  -H "X-API-Key: py_live_secure_payments_key_2024"
+  -H "X-API-Key: py_live_secure_payments_key_2025"
 ```
 
 ### Auditoría y Registro de Eventos
@@ -900,7 +900,7 @@ Sin autenticación requerida (auditoría interna)
   "details": "{\"amount\":\"2599.98\",\"orderId\":\"1\"}",
   "status": "SUCCESS",
   "errorMessage": null,
-  "createdAt": "2024-11-16T18:15:23",
+  "createdAt": "2025-11-16T18:15:23",
   "sourceIp": null
 }
 ```
@@ -947,12 +947,12 @@ curl "http://localhost:8080/api/v1/audit/event-type/PAYMENT_APPROVED?page=0&size
 **Buscar eventos dentro de un rango de fechas**
 
 ```
-GET /api/v1/audit/date-range?startDate=2024-11-16T00:00:00&endDate=2024-11-16T23:59:59&page=0&size=20
+GET /api/v1/audit/date-range?startDate=2025-11-16T00:00:00&endDate=2025-11-16T23:59:59&page=0&size=20
 ```
 
 **Ejemplo:**
 ```bash
-curl "http://localhost:8080/api/v1/audit/date-range?startDate=2024-11-16T00:00:00&endDate=2024-11-16T23:59:59"
+curl "http://localhost:8080/api/v1/audit/date-range?startDate=2025-11-16T00:00:00&endDate=2025-11-16T23:59:59"
 ```
 
 #### Obtener Logs por Usuario
@@ -1114,11 +1114,11 @@ Password: (dejar vacío)
 
 El sistema utiliza autenticación basada en API Keys:
 
-- **Tokenización**: `X-API-Key: tk_live_secure_tokenization_key_2024`
-- **Clientes**: `X-API-Key: cs_live_secure_customer_key_2024`
-- **Productos**: `X-API-Key: pd_live_secure_products_key_2024`
-- **Carrito/Pedidos**: `X-API-Key: or_live_secure_orders_key_2024`
-- **Pagos/Checkout**: `X-API-Key: py_live_secure_payments_key_2024`
+- **Tokenización**: `X-API-Key: tk_live_secure_tokenization_key_2025`
+- **Clientes**: `X-API-Key: cs_live_secure_customer_key_2025`
+- **Productos**: `X-API-Key: pd_live_secure_products_key_2025`
+- **Carrito/Pedidos**: `X-API-Key: or_live_secure_orders_key_2025`
+- **Pagos/Checkout**: `X-API-Key: py_live_secure_payments_key_2025`
 - **Ping**: Sin autenticación
 
 ### Configuración de Spring Security
@@ -1145,7 +1145,7 @@ El sistema utiliza autenticación basada en API Keys:
 
 ```json
 {
-  "timestamp": "2024-11-16T18:15:23",
+  "timestamp": "2025-11-16T18:15:23",
   "status": 400,
   "error": "Validation Failed",
   "message": "Invalid request parameters",
@@ -1389,18 +1389,18 @@ En Postman → Environments → New:
 ```json
 {
   "base_url": "http://localhost:8080",
-  "tokenization_key": "tk_live_secure_tokenization_key_2024",
-  "customer_key": "cs_live_secure_customer_key_2024",
-  "products_key": "pd_live_secure_products_key_2024",
-  "orders_key": "or_live_secure_orders_key_2024",
-  "payments_key": "py_live_secure_payments_key_2024"
+  "tokenization_key": "tk_live_secure_tokenization_key_2025",
+  "customer_key": "cs_live_secure_customer_key_2025",
+  "products_key": "pd_live_secure_products_key_2025",
+  "orders_key": "or_live_secure_orders_key_2025",
+  "payments_key": "py_live_secure_payments_key_2025"
 }
 ```
 
 #### Opciones 3: Usar Headers en cada request
 
 ```
-X-API-Key: tk_live_secure_tokenization_key_2024
+X-API-Key: tk_live_secure_tokenization_key_2025
 Content-Type: application/json
 ```
 
@@ -1457,7 +1457,7 @@ curl -X GET http://localhost:8080/ping
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/customers \
-  -H "X-API-Key: cs_live_secure_customer_key_2024" \
+  -H "X-API-Key: cs_live_secure_customer_key_2025" \
   -H "Content-Type: application/json" \
   -d '{
     "firstName": "Juan",
@@ -1476,7 +1476,7 @@ curl -X POST http://localhost:8080/api/v1/customers \
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/products \
-  -H "X-API-Key: pd_live_secure_products_key_2024" \
+  -H "X-API-Key: pd_live_secure_products_key_2025" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Laptop Dell XPS",
@@ -1492,7 +1492,7 @@ curl -X POST http://localhost:8080/api/v1/products \
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/tokenization/tokens \
-  -H "X-API-Key: tk_live_secure_tokenization_key_2024" \
+  -H "X-API-Key: tk_live_secure_tokenization_key_2025" \
   -H "Content-Type: application/json" \
   -d '{
     "cardNumber": "4111111111111111",
