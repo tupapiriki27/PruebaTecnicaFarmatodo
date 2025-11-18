@@ -10,6 +10,18 @@ Sistema desarrollado con **Java 21** y **Spring Boot 3.5.7** que simula un proce
 - [Instalación](#instalación)
 - [Configuración](#configuración)
 - [Ejecución](#ejecución)
+  - [Modo Desarrollo (Maven)](#modo-desarrollo-maven)
+  - [Modo Producción (Maven)](#modo-producción-maven)
+  - [Modo Docker](#modo-docker-🐳)
+- [Descripción del Sistema y Componentes](#🏗️-descripción-del-sistema-y-componentes)
+  - [Arquitectura General](#arquitectura-general)
+  - [Componentes Principales](#componentes-principales)
+- [Pruebas y Testing](#🧪-pruebas-y-testing)
+- [Usar Colecciones API](#🔌-usar-colecciones-api-postman-insomnia-bruno)
+  - [Postman](#📮-postman)
+  - [Insomnia](#🐛-insomnia)
+  - [Bruno](#🎭-bruno)
+- [Desplegar en GCP](#🚀-desplegar-en-gcp-desde-cero)
 - [Endpoints de la API](#endpoints-de-la-api)
   - [Ping](#ping)
   - [Tokenización](#tokenización)
@@ -95,9 +107,14 @@ Sistema desarrollado con **Java 21** y **Spring Boot 3.5.7** que simula un proce
 
 ## 📦 Requisitos Previos
 
+### Para Ejecutar Localmente (Maven)
 - Java 21 o superior
 - Maven 3.6+
 - IDE compatible (IntelliJ IDEA, Eclipse, VS Code)
+
+### Para Ejecutar con Docker
+- Docker ([Descargar](https://www.docker.com/products/docker-desktop))
+- Docker Compose (incluido en Docker Desktop)
 
 ## 🚀 Instalación
 
@@ -208,20 +225,69 @@ Valores válidos: `0.0` (sin rechazos) a `1.0` (100% de rechazos)
 
 ## ▶️ Ejecución
 
-### Modo Desarrollo
+### Modo Desarrollo (Maven)
 
 ```bash
 mvn spring-boot:run
 ```
 
-### Modo Producción
+### Modo Producción (Maven)
 
 ```bash
 mvn clean package
 java -jar target/test-app-0.0.1-SNAPSHOT.jar
 ```
 
+### Modo Docker 🐳
+
+#### Ejecutar con Docker Compose
+
+```bash
+# Construir e iniciar
+docker-compose up --build
+
+# O en background
+docker-compose up -d --build
+
+# Ver logs
+docker-compose logs -f
+
+# Detener
+docker-compose down
+```
+
+#### Ejecutar con Docker
+
+```bash
+# Construir imagen
+docker build -t test-app:latest .
+
+# Ejecutar contenedor
+docker run -p 8080:8080 test-app:latest
+```
+
+#### Usar Script Helper (opcional)
+
+```bash
+# Hacer el script ejecutable
+chmod +x docker-helper.sh
+
+# Ver opciones disponibles
+./docker-helper.sh help
+
+# Iniciar aplicación
+./docker-helper.sh up
+
+# Ver logs
+./docker-helper.sh logs
+
+# Detener
+./docker-helper.sh down
+```
+
 La aplicación estará disponible en: `http://localhost:8080`
+
+**Para más detalles sobre Docker, revisa [DOCKER_GUIDE.md](./DOCKER_GUIDE.md)**
 
 ## 📡 Endpoints de la API
 
@@ -1146,6 +1212,531 @@ src/
         ├── service/
         └── TestAppApplicationTests.java
 ```
+
+## 🏗️ Descripción del Sistema y Componentes
+
+### Arquitectura General
+
+El proyecto sigue una **arquitectura en capas** con separación clara de responsabilidades:
+
+```
+┌─────────────────────────────────────────────────────┐
+│           Capa de Presentación (REST API)           │
+│  (/api/v1/tokenization, /api/v1/customers, etc.)   │
+└────────────────┬────────────────────────────────────┘
+                 │
+┌────────────────▼────────────────────────────────────┐
+│         Capa de Seguridad (API Key Auth)            │
+│     (ApiKeyAuthenticationFilter, SecurityConfig)    │
+└────────────────┬────────────────────────────────────┘
+                 │
+┌────────────────▼────────────────────────────────────┐
+│         Capa de Lógica de Negocio (Services)        │
+│  (TokenizationService, CustomerService, etc.)       │
+└────────────────┬────────────────────────────────────┘
+                 │
+┌────────────────▼────────────────────────────────────┐
+│      Capa de Persistencia (Repository / JPA)        │
+│  (CardTokenRepository, CustomerRepository, etc.)    │
+└────────────────┬────────────────────────────────────┘
+                 │
+┌────────────────▼────────────────────────────────────┐
+│      Base de Datos (H2 en Memoria)                  │
+│              (Development)                          │
+└─────────────────────────────────────────────────────┘
+```
+
+### Componentes Principales
+
+#### 1. **Tokenización de Tarjetas** 🔐
+- **Controller**: `TokenizationController`
+- **Service**: `TokenizationService`
+- **Entity**: `CardToken`
+- **Funcionalidad**: Genera tokens seguros para tarjetas de crédito con detección automática de marca (VISA, MASTERCARD, AMEX)
+
+#### 2. **Gestión de Clientes** 👥
+- **Controller**: `CustomerController`
+- **Service**: `CustomerService`
+- **Entity**: `Customer`
+- **Funcionalidad**: Registro y validación de clientes con unicidad de email y teléfono
+
+#### 3. **Gestión de Productos** 📦
+- **Controller**: `ProductController`
+- **Service**: `ProductService`
+- **Entity**: `Product`
+- **Funcionalidad**: CRUD de productos con gestión de stock y categorización
+
+#### 4. **Carrito de Compras** 🛒
+- **Controller**: `OrderController`
+- **Service**: `OrderService`
+- **Entity**: `Order`, `OrderItem`
+- **Funcionalidad**: Agregar productos al carrito, validar stock, calcular totales
+
+#### 5. **Procesamiento de Pagos** 💳
+- **Controller**: `PaymentController`
+- **Service**: `PaymentService`, `EmailService`
+- **Entity**: `Payment`
+- **Funcionalidad**: Procesa pagos con reintentos automáticos y notificaciones por email
+
+#### 6. **Auditoría y Logging** 📊
+- **Controller**: `AuditController`
+- **Service**: `AuditService`
+- **Entity**: `AuditLog`
+- **Funcionalidad**: Registro completo de eventos del sistema con trazabilidad
+
+#### 7. **Health Check** ✅
+- **Controller**: `PingController`
+- **Endpoint**: `GET /ping`
+- **Funcionalidad**: Verifica disponibilidad de la aplicación (sin autenticación)
+
+### Flujo de Datos Típico
+
+```
+1. Cliente REST → Endpoint (/api/v1/...)
+        ↓
+2. Spring Web → Dispatcher Servlet
+        ↓
+3. Security Filter → Validar API Key
+        ↓
+4. Controller → Procesar request
+        ↓
+5. Service → Lógica de negocio
+        ↓
+6. Repository → Acceso a datos
+        ↓
+7. Database → Persistencia
+        ↓
+8. Response → Cliente (JSON)
+```
+
+---
+
+## 🧪 Pruebas y Testing
+
+### Ejecutar Tests Localmente
+
+#### Opción 1: Maven (Command Line)
+
+```bash
+# Ejecutar todos los tests
+mvn test
+
+# Ejecutar un test específico
+mvn test -Dtest=TokenizationServiceTest
+
+# Ejecutar tests con cobertura
+mvn test jacoco:report
+
+# Ver reporte de cobertura
+# Abre: target/site/jacoco/index.html
+```
+
+#### Opción 2: IDE (IntelliJ IDEA)
+
+1. Click derecho en la carpeta `src/test/java`
+2. Selecciona "Run 'All Tests'"
+3. O en un archivo específico: Click derecho → "Run"
+
+#### Opción 3: Docker
+
+```bash
+docker-compose exec test-app mvn test
+```
+
+### Cobertura de Tests
+
+**Total: 36 tests** cubriendo:
+
+- ✅ **PingControllerTest** (1 test)
+- ✅ **TokenizationServiceTest** (4 tests)
+- ✅ **TokenizationControllerTest** (4 tests)
+- ✅ **CustomerServiceTest** (4 tests)
+- ✅ **CustomerControllerTest** (4 tests)
+- ✅ **ProductServiceTest** (4 tests)
+- ✅ **OrderServiceTest** (4 tests)
+- ✅ **PaymentServiceTest** (4 tests)
+- ✅ **EmailServiceTest** (2 tests)
+- ✅ **AuditServiceTest** (2 tests)
+
+### Ver Resultados de Tests
+
+```bash
+# Después de ejecutar tests
+cat target/surefire-reports/TEST-*.xml
+
+# O desde el navegador:
+# target/surefire-reports/index.html
+```
+
+---
+
+## 🔌 Usar Colecciones API (Postman, Insomnia, Bruno)
+
+### 📮 Postman
+
+#### Opción 1: Importar Colección
+
+1. **Abre Postman**
+2. Click en **Import**
+3. Selecciona: `postman_collection.json` (en raíz del proyecto)
+4. Selecciona: `postman_environment.json`
+5. ¡Listo! Ya tienes todos los endpoints
+
+#### Opción 2: Crear Variables de Entorno
+
+En Postman → Environments → New:
+
+```json
+{
+  "base_url": "http://localhost:8080",
+  "tokenization_key": "tk_live_secure_tokenization_key_2024",
+  "customer_key": "cs_live_secure_customer_key_2024",
+  "products_key": "pd_live_secure_products_key_2024",
+  "orders_key": "or_live_secure_orders_key_2024",
+  "payments_key": "py_live_secure_payments_key_2024"
+}
+```
+
+#### Opciones 3: Usar Headers en cada request
+
+```
+X-API-Key: tk_live_secure_tokenization_key_2024
+Content-Type: application/json
+```
+
+---
+
+### 🐛 Insomnia
+
+#### Importar Colección
+
+1. **Abre Insomnia**
+2. Menú → **Import/Export** → **Import Data**
+3. Selecciona `postman_collection.json`
+4. Insomnia convertirá automáticamente al formato
+
+#### Crear Workspace
+
+```bash
+# O crea manualmente:
+# 1. New Request → GET
+# 2. URL: http://localhost:8080/ping
+# 3. Click Send
+```
+
+---
+
+### 🎭 Bruno
+
+#### Usar Colección
+
+Bruno es compatible con colecciones de Postman:
+
+1. **Abre Bruno**
+2. New Collection → Selecciona carpeta del proyecto
+3. Click **Import** → Selecciona `postman_collection.json`
+4. ¡Listo!
+
+#### Ventaja de Bruno
+
+- ✅ Open source
+- ✅ Git-friendly (almacena en texto plano)
+- ✅ Sin servidor en la nube
+
+---
+
+### 📋 Ejemplos de Requests
+
+#### Health Check (Sin Autenticación)
+
+```bash
+curl -X GET http://localhost:8080/ping
+```
+
+#### Crear Cliente (Con API Key)
+
+```bash
+curl -X POST http://localhost:8080/api/v1/customers \
+  -H "X-API-Key: cs_live_secure_customer_key_2024" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "firstName": "Juan",
+    "lastName": "Pérez",
+    "email": "juan@example.com",
+    "phoneNumber": "+34600000000",
+    "address": "Calle Principal 123",
+    "city": "Madrid",
+    "state": "Madrid",
+    "zipCode": "28001",
+    "country": "España"
+  }'
+```
+
+#### Crear Producto
+
+```bash
+curl -X POST http://localhost:8080/api/v1/products \
+  -H "X-API-Key: pd_live_secure_products_key_2024" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Laptop Dell XPS",
+    "description": "High performance laptop",
+    "price": 1299.99,
+    "stock": 50,
+    "category": "Electronics",
+    "sku": "DELL-XPS-001"
+  }'
+```
+
+#### Tokenizar Tarjeta
+
+```bash
+curl -X POST http://localhost:8080/api/v1/tokenization/tokens \
+  -H "X-API-Key: tk_live_secure_tokenization_key_2024" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "cardNumber": "4111111111111111",
+    "cvv": "123",
+    "expirationDate": "12/25",
+    "cardholderName": "John Doe"
+  }'
+```
+
+---
+
+## 🚀 Desplegar en GCP desde Cero
+
+### Requisitos Previos
+
+- Cuenta de Google Cloud ([Crear](https://console.cloud.google.com))
+- Project creado en GCP
+- GCP CLI instalado ([Descargar](https://cloud.google.com/sdk/docs/install))
+- Docker installed locally
+
+### Paso 1: Autenticarse en GCP
+
+```bash
+# Iniciar sesión en GCP
+gcloud auth login
+
+# Configurar proyecto
+gcloud config set project MY-PROJECT-ID
+
+# Habilitar servicios necesarios
+gcloud services enable compute.googleapis.com
+gcloud services enable containerregistry.googleapis.com
+gcloud services enable artifactregistry.googleapis.com
+```
+
+### Paso 2: Crear Artifact Registry (Docker Repository)
+
+```bash
+# Crear repositorio
+gcloud artifacts repositories create test-app-repo \
+  --repository-format=docker \
+  --location=us-central1 \
+  --description="Docker repository for test-app"
+
+# Configurar Docker
+gcloud auth configure-docker us-central1-docker.pkg.dev
+```
+
+### Paso 3: Construir y Subir Imagen a GCP
+
+```bash
+# Desde la carpeta del proyecto
+cd /Users/rbeltran/Desktop/test-app
+
+# Construir imagen
+docker build -t test-app:latest .
+
+# Etiquetar para GCP
+docker tag test-app:latest \
+  us-central1-docker.pkg.dev/MY-PROJECT-ID/test-app-repo/test-app:latest
+
+# Subir a Artifact Registry
+docker push us-central1-docker.pkg.dev/MY-PROJECT-ID/test-app-repo/test-app:latest
+```
+
+### Paso 4: Crear Instancia en Compute Engine
+
+```bash
+# Crear VM instance
+gcloud compute instances create test-app-vm \
+  --zone=us-central1-a \
+  --machine-type=e2-medium \
+  --image-family=debian-11 \
+  --image-project=debian-cloud \
+  --scopes=cloud-platform
+
+# SSH a la instancia
+gcloud compute ssh test-app-vm --zone=us-central1-a
+```
+
+### Paso 5: Instalar Docker en la Instancia GCP
+
+```bash
+# En la VM remota
+sudo apt-get update
+sudo apt-get install -y docker.io
+
+# Iniciar Docker
+sudo systemctl start docker
+sudo systemctl enable docker
+
+# Agregar usuario al grupo docker
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
+### Paso 6: Descargar y Ejecutar Imagen en GCP
+
+```bash
+# En la VM remota
+gcloud auth configure-docker us-central1-docker.pkg.dev
+
+# Descargar imagen
+docker pull us-central1-docker.pkg.dev/MY-PROJECT-ID/test-app-repo/test-app:latest
+
+# Ejecutar contenedor
+docker run -d \
+  -p 8080:8080 \
+  -e GMAIL_USERNAME="tu-email@gmail.com" \
+  -e GMAIL_PASSWORD="tu-app-password" \
+  --name test-app-container \
+  us-central1-docker.pkg.dev/MY-PROJECT-ID/test-app-repo/test-app:latest
+
+# Verificar que está corriendo
+docker ps
+```
+
+### Paso 7: Abrir Firewall en GCP
+
+```bash
+# Desde tu máquina local
+gcloud compute firewall-rules create allow-test-app \
+  --allow=tcp:8080 \
+  --source-ranges=0.0.0.0/0 \
+  --target-tags=test-app
+
+# Aplicar tag a la instancia
+gcloud compute instances add-tags test-app-vm \
+  --tags=test-app \
+  --zone=us-central1-a
+```
+
+### Paso 8: Acceder a la Aplicación
+
+```bash
+# Obtener IP pública
+gcloud compute instances describe test-app-vm \
+  --zone=us-central1-a \
+  --format='get(networkInterfaces[0].accessConfigs[0].natIP)'
+
+# Acceder a la aplicación
+# http://<EXTERNAL_IP>:8080/ping
+# http://<EXTERNAL_IP>:8080/h2-console
+```
+
+### Paso 9: Usar Docker Compose en GCP (Opcional)
+
+Si prefieres usar docker-compose:
+
+```bash
+# En la VM remota, clonar el repositorio
+git clone <tu-repo> test-app
+cd test-app
+
+# Ejecutar con docker-compose
+docker-compose up -d
+
+# Ver logs
+docker-compose logs -f
+```
+
+### Paso 10: Configurar Cloud SQL (Producción)
+
+```bash
+# Crear instancia CloudSQL
+gcloud sql instances create test-app-db \
+  --database-version=POSTGRES_15 \
+  --tier=db-f1-micro \
+  --region=us-central1
+
+# Crear base de datos
+gcloud sql databases create testdb --instance=test-app-db
+
+# Obtener conexión
+gcloud sql instances describe test-app-db
+
+# Actualizar docker-compose.yml con Cloud SQL
+# (Ver sección Opción 3 en docker-compose)
+```
+
+### Paso 11: Monitoreo (Cloud Monitoring)
+
+```bash
+# Ver logs de la aplicación
+gcloud compute instances tail test-app-vm \
+  --zone=us-central1-a
+
+# O acceder a Cloud Logging
+# https://console.cloud.google.com/logs
+```
+
+### Crear Script Automático para GCP
+
+Crea un archivo `deploy-gcp.sh`:
+
+```bash
+#!/bin/bash
+set -e
+
+PROJECT_ID="MY-PROJECT-ID"
+REGION="us-central1"
+REPO_NAME="test-app-repo"
+IMAGE_NAME="test-app"
+VM_NAME="test-app-vm"
+VM_ZONE="us-central1-a"
+
+echo "🚀 Iniciando deploy en GCP..."
+
+# Construir imagen
+echo "📦 Construyendo imagen..."
+docker build -t ${IMAGE_NAME}:latest .
+
+# Etiquetar
+docker tag ${IMAGE_NAME}:latest \
+  ${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/${IMAGE_NAME}:latest
+
+# Subir
+echo "📤 Subiendo a Artifact Registry..."
+docker push ${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/${IMAGE_NAME}:latest
+
+# Desplegar
+echo "🚀 Desplegando en Compute Engine..."
+gcloud compute ssh ${VM_NAME} --zone=${VM_ZONE} --command="\
+  docker pull ${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/${IMAGE_NAME}:latest && \
+  docker stop test-app-container || true && \
+  docker rm test-app-container || true && \
+  docker run -d \
+    -p 8080:8080 \
+    -e GMAIL_USERNAME='${GMAIL_USERNAME}' \
+    -e GMAIL_PASSWORD='${GMAIL_PASSWORD}' \
+    --name test-app-container \
+    ${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/${IMAGE_NAME}:latest
+"
+
+echo "✅ Deploy completado!"
+```
+
+Usa:
+```bash
+chmod +x deploy-gcp.sh
+GMAIL_USERNAME="tu-email@gmail.com" GMAIL_PASSWORD="tu-pass" ./deploy-gcp.sh
+```
+
+---
 
 ## 📚 Documentación Adicional
 
