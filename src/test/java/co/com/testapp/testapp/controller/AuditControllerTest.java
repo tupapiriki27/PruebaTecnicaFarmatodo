@@ -87,7 +87,7 @@ class AuditControllerTest {
     when(auditService.getAuditLogById(testId)).thenReturn(testAuditLog);
 
     mockMvc.perform(get("/api/v1/audit/{id}", testId)
-        .header("X-API-Key", "ad_live_secure_audit_key_2024")
+        .header("X-API-Key", "py_live_secure_audit_key_2025")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").value(testId.toString()))
@@ -107,7 +107,7 @@ class AuditControllerTest {
     when(auditService.getAuditLogById(testId)).thenReturn(null);
 
     mockMvc.perform(get("/api/v1/audit/{id}", testId)
-        .header("X-API-Key", "ad_live_secure_audit_key_2024")
+        .header("X-API-Key", "py_live_secure_audit_key_2025")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound());
   }
@@ -135,7 +135,7 @@ class AuditControllerTest {
     when(auditService.getAuditLogsByEntityId("123")).thenReturn(logs);
 
     mockMvc.perform(get("/api/v1/audit/entity/{entityId}", "123")
-        .header("X-API-Key", "ad_live_secure_audit_key_2024")
+        .header("X-API-Key", "py_live_secure_audit_key_2025")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$").isArray())
@@ -151,7 +151,7 @@ class AuditControllerTest {
   @Test
   void getAuditLogsByEventType_WithInvalidType_ShouldReturnBadRequest() throws Exception {
     mockMvc.perform(get("/api/v1/audit/event-type/{eventType}", "INVALID_EVENT_TYPE")
-        .header("X-API-Key", "ad_live_secure_audit_key_2024")
+        .header("X-API-Key", "py_live_secure_audit_key_2025")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
   }
@@ -163,7 +163,7 @@ class AuditControllerTest {
   @Test
   void getAuditLogsByStatus_WithInvalidStatus_ShouldReturnBadRequest() throws Exception {
     mockMvc.perform(get("/api/v1/audit/status/{status}", "INVALID_STATUS")
-        .header("X-API-Key", "ad_live_secure_audit_key_2024")
+        .header("X-API-Key", "py_live_secure_audit_key_2025")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
   }
@@ -186,7 +186,7 @@ class AuditControllerTest {
     mockMvc.perform(get("/api/v1/audit/date-range")
         .param("startDate", startDate.toString())
         .param("endDate", endDate.toString())
-        .header("X-API-Key", "ad_live_secure_audit_key_2024")
+        .header("X-API-Key", "py_live_secure_audit_key_2025")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.content").isArray())
@@ -201,7 +201,7 @@ class AuditControllerTest {
     mockMvc.perform(get("/api/v1/audit/date-range")
         .param("startDate", "invalid-date")
         .param("endDate", "invalid-date")
-        .header("X-API-Key", "ad_live_secure_audit_key_2024")
+        .header("X-API-Key", "py_live_secure_audit_key_2025")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
   }
@@ -249,7 +249,7 @@ class AuditControllerTest {
     when(auditService.getAuditLogById(testId)).thenReturn(auditLogComplete);
 
     mockMvc.perform(get("/api/v1/audit/{id}", testId)
-        .header("X-API-Key", "ad_live_secure_audit_key_2024")
+        .header("X-API-Key", "py_live_secure_audit_key_2025")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").value(testId.toString()))
